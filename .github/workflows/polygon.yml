@@ -1,0 +1,46 @@
+name: Polygon Realtime Monitor
+
+on:
+  schedule:
+    # Mon–Fri at 9:25 AM EST (13:25 UTC)
+    - cron: "25 13 * * 1-5"
+  workflow_dispatch:  # allow manual runs
+
+jobs:
+  run-polygon:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install polygon-api-client websockets python-dotenv pandas matplotlib GitPython certifi
+
+      - name: Create .env file
+        run: |
+          echo "POLYGON_API_KEY=${{ secrets.POLYGON_API_KEY }}" >> .env
+          echo "ALERT_REPEAT_THRESHOLD=3" >> .env
+          echo "OUTPUT_DIR=./out" >> .env
+          echo "INCLUDE_PUTS=0" >> .env
+          echo "GITHUB_REPO=haywardsjohnny/polygon-options-realtime" >> .env
+          echo "GITHUB_PAT=${{ secrets.GITHUB_PAT }}" >> .env
+          echo "GITHUB_BRANCH=main" >> .env
+
+      - name: Run Polygon Realtime Tool
+        run: |
+          python polygon_options_realtime_tool.py
+
+      - name: Upload Outputs (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: polygon-out
+          path: out/
+
