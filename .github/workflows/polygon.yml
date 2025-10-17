@@ -2,10 +2,9 @@ name: Polygon Realtime Monitor
 
 on:
   schedule:
-    # Mon–Fri at 9:25 AM EST (13:25 UTC)
-    - cron: "25 13 * * 1-5"
-  workflow_dispatch:  # allow manual runs
-
+    # Run every 10 minutes between 9:30 AM and 4:00 PM EST, Mon–Fri
+    - cron: "*/10 13-20 * * 1-5"
+  workflow_dispatch:
 jobs:
   run-polygon:
     runs-on: ubuntu-latest
