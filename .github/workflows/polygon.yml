@@ -31,7 +31,7 @@ jobs:
           echo "OUTPUT_DIR=./out" >> .env
           echo "INCLUDE_PUTS=0" >> .env
           echo "GITHUB_REPO=haywardsjohnny/polygon-options-realtime" >> .env
-          echo "GITHUB_PAT=${{ secrets.GITHUB_PAT }}" >> .env
+          echo "GITHUB_PAT=${{ secrets.REPO_PAT }}" >> .env
           echo "GITHUB_BRANCH=main" >> .env
 
       - name: Run Polygon Realtime Tool
